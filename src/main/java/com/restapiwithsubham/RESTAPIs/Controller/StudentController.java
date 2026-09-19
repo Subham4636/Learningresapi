@@ -1,19 +1,33 @@
 package com.restapiwithsubham.RESTAPIs.Controller;
 
+import com.restapiwithsubham.RESTAPIs.Dto.AddStudentRequestDto;
 import com.restapiwithsubham.RESTAPIs.Dto.StudentDto;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.restapiwithsubham.RESTAPIs.Service.StudentService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class StudentController {
 
-    @GetMapping("/student")
-    public StudentDto getStudent(){
-        return new StudentDto(1966, "Subham Kumar", "subhamsbu@gmail.com");
+    private final StudentService studentService;
+
+    @GetMapping("/students")
+    public ResponseEntity<List<StudentDto>> getAllStudent(){
+        return ResponseEntity.status(HttpStatus.OK).body(studentService.getAllStudents());
     }
 
-    @GetMapping("/student/{id}")
-    public StudentDto getStudentbyId(){
-        return new StudentDto(1966, "Subham Kumar", "subhamsbu@gmail.com");
+    @GetMapping("/students/{id}")
+    public ResponseEntity<StudentDto> getStudentById(@PathVariable Long id){
+        return ResponseEntity.ok(studentService.getStudentsById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<StudentDto> createNewStudent(@RequestBody AddStudentRequestDto addStudentRequestDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(studentService.createNewStudent(addStudentRequestDto));
     }
 }
