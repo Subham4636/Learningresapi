@@ -12,22 +12,29 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/students")
 public class StudentController {
 
     private final StudentService studentService;
 
-    @GetMapping("/students")
+    @GetMapping
     public ResponseEntity<List<StudentDto>> getAllStudent(){
         return ResponseEntity.status(HttpStatus.OK).body(studentService.getAllStudents());
     }
 
-    @GetMapping("/students/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<StudentDto> getStudentById(@PathVariable Long id){
         return ResponseEntity.ok(studentService.getStudentsById(id));
     }
 
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<StudentDto> createNewStudent(@RequestBody AddStudentRequestDto addStudentRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(studentService.createNewStudent(addStudentRequestDto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteStudentById(@PathVariable long id){
+        studentService.deleteStudentById(id);
+        return ResponseEntity.noContent().build();
     }
 }
